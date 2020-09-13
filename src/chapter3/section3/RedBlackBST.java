@@ -76,6 +76,11 @@ public class RedBlackBST <Key extends  Comparable<Key>,Value> {
         return h;
     }
 
+    private Node moveRedLeft(Node h){
+
+        
+    }
+
     public int size(){
         return size(root);
     }
