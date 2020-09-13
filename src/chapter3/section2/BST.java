@@ -1,5 +1,6 @@
 package chapter3.section2;
 
+import chapter1.section2.Queue;
 
 
 import java.util.Scanner;
@@ -209,18 +210,45 @@ public class BST<Key extends Comparable<Key>,Value> {
         if(x == null)
             return null;
         int cmp = key.compareTo(x.key);
-        if(cmp == 0){
-            if(x.left == null)
-                return null;
 
-        }
         if(cmp > 0 )
-            return null;
-        if(cmp <0 )
-            return null;
-        return null;
+            x.right = delete(x.right,key);
+        else if(cmp <0 )
+            x.left = delete(x.left,key);
+        else {
+            if (x.left == null)
+                return x.right;
+            if (x.right == null)
+                return x.left;
+            Node tmp = x;
+            x = min(tmp.right);
+            x.left = tmp.left;
+            x.right = deleteMin(tmp.right);
+        }
+        x.N = size(x.right) + size(x.left) + 1;
+        return x;
+    }
+    //二叉树查找操作
+    public Iterable<Key> keys(Key lo, Key hi){
+        Queue<Key> queue = new Queue<Key>();
+        keys(root, queue, lo, hi);
+        return queue;
+    }
+    //前序后序中序都可以的，目的就是遍历然后进行比较
+    private void keys (Node x, Queue<Key> queue, Key lo, Key hi){
+        if(x == null)
+            return;
+        int cmplo = lo.compareTo(x.key);
+        int cmphi = hi.compareTo(x.key);
+        if(cmplo < 0)
+            keys(x.left,queue,lo,hi);
+        if(cmplo <= 0 && cmphi >= 0)
+            queue.enqueue(x.key);
+        if(cmphi > 0)
+            keys(x.right,queue,lo,hi);
 
     }
+
     public static void main(String[] args) {
         var scanner = new Scanner(System.in);
         while(true){
